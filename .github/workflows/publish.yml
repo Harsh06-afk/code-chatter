@@ -1,0 +1,42 @@
+name: Publish
+
+# Fires when you push a version tag, e.g.:
+#   git tag v0.0.2 && git push origin v0.0.2
+# It builds the extension, publishes to Open VSX, and attaches the .vsix to a
+# GitHub Release so plain-VS-Code users can download and sideload it.
+on:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # needed to create the GitHub Release
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build bundle
+        run: npm run build
+
+      - name: Package VSIX
+        run: npx @vscode/vsce package --allow-star-activation -o code-chatter.vsix
+
+      - name: Publish to Open VSX
+        run: npx ovsx publish code-chatter.vsix
+        env:
+          OVSX_PAT: ${{ secrets.OPEN_VSX_TOKEN }}
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: code-chatter.vsix
+          generate_release_notes: true

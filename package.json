@@ -5,9 +5,9 @@
   "description": "Understand any repo in minutes. Local-first, BYOK RAG over your codebase in the chat panel.",
   "publisher": "codechatter",
   "license": "MIT",
-  "repository": { "type": "git", "url": "https://github.com/your-org/code-chatter.git" },
-  "bugs": { "url": "https://github.com/your-org/code-chatter/issues" },
-  "homepage": "https://github.com/your-org/code-chatter#readme",
+  "repository": { "type": "git", "url": "https://github.com/Harsh06-afk/code-chatter.git" },
+  "bugs": { "url": "https://github.com/Harsh06-afk/code-chatter/issues" },
+  "homepage": "https://github.com/Harsh06-afk/code-chatter#readme",
   "engines": {
     "vscode": "^1.90.0",
     "node": ">=18"

@@ -9,6 +9,7 @@ node_modules/**
 .gitignore
 .codechatter/**
 *.vsix
+PRD-CodeChatter.md
 tsconfig.json
 esbuild.js
 **/*.ts
