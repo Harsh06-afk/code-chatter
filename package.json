@@ -1,22 +1,40 @@
 {
   "name": "code-chatter",
   "displayName": "CodeChatter",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Understand any repo in minutes. Local-first, BYOK RAG over your codebase in the chat panel.",
   "publisher": "codechatter",
   "license": "MIT",
-  "repository": { "type": "git", "url": "https://github.com/Harsh06-afk/code-chatter.git" },
-  "bugs": { "url": "https://github.com/Harsh06-afk/code-chatter/issues" },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Harsh06-afk/code-chatter.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Harsh06-afk/code-chatter/issues"
+  },
   "homepage": "https://github.com/Harsh06-afk/code-chatter#readme",
   "engines": {
     "vscode": "^1.90.0",
     "node": ">=18"
   },
-  "categories": ["Machine Learning", "Programming Languages", "Education"],
-  "keywords": ["chat", "codebase", "rag", "gemini", "byok", "ai"],
+  "categories": [
+    "Machine Learning",
+    "Programming Languages",
+    "Education"
+  ],
+  "keywords": [
+    "chat",
+    "codebase",
+    "rag",
+    "gemini",
+    "byok",
+    "ai"
+  ],
   "main": "./dist/extension.js",
   "icon": "icon.png",
-  "activationEvents": ["onStartupFinished"],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
   "contributes": {
     "chatParticipants": [
       {
@@ -34,16 +52,44 @@
       }
     ],
     "commands": [
-      { "command": "codechatter.indexRepo", "title": "CodeChatter: Index Repo", "category": "CodeChatter" },
-      { "command": "codechatter.reindex", "title": "CodeChatter: Re-index Changed Files", "category": "CodeChatter" },
-      { "command": "codechatter.deleteIndex", "title": "CodeChatter: Delete Index", "category": "CodeChatter" },
-      { "command": "codechatter.setApiKey", "title": "CodeChatter: Set API Key", "category": "CodeChatter" },
-      { "command": "codechatter.explainSelection", "title": "CodeChatter: Explain with Repo Context", "category": "CodeChatter" },
-      { "command": "codechatter.repoTour", "title": "CodeChatter: Repo Tour", "category": "CodeChatter" }
+      {
+        "command": "codechatter.indexRepo",
+        "title": "CodeChatter: Index Repo",
+        "category": "CodeChatter"
+      },
+      {
+        "command": "codechatter.reindex",
+        "title": "CodeChatter: Re-index Changed Files",
+        "category": "CodeChatter"
+      },
+      {
+        "command": "codechatter.deleteIndex",
+        "title": "CodeChatter: Delete Index",
+        "category": "CodeChatter"
+      },
+      {
+        "command": "codechatter.setApiKey",
+        "title": "CodeChatter: Set API Key",
+        "category": "CodeChatter"
+      },
+      {
+        "command": "codechatter.explainSelection",
+        "title": "CodeChatter: Explain with Repo Context",
+        "category": "CodeChatter"
+      },
+      {
+        "command": "codechatter.repoTour",
+        "title": "CodeChatter: Repo Tour",
+        "category": "CodeChatter"
+      }
     ],
     "menus": {
       "editor/context": [
-        { "command": "codechatter.explainSelection", "when": "editorHasSelection", "group": "navigation@9" }
+        {
+          "command": "codechatter.explainSelection",
+          "when": "editorHasSelection",
+          "group": "navigation@9"
+        }
       ]
     },
     "configuration": {
@@ -51,7 +97,14 @@
       "properties": {
         "codechatter.chatProvider": {
           "type": "string",
-          "enum": ["gemini", "openai", "deepseek", "groq", "anthropic", "ollama"],
+          "enum": [
+            "gemini",
+            "openai",
+            "deepseek",
+            "groq",
+            "anthropic",
+            "ollama"
+          ],
           "default": "gemini",
           "description": "Provider used to answer questions."
         },
@@ -62,7 +115,11 @@
         },
         "codechatter.embeddingProvider": {
           "type": "string",
-          "enum": ["gemini", "openai", "ollama"],
+          "enum": [
+            "gemini",
+            "openai",
+            "ollama"
+          ],
           "default": "gemini",
           "description": "Provider used to build the index. Locked once a repo is indexed; changing it requires a full re-index."
         },
