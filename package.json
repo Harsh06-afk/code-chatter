@@ -15,6 +15,7 @@
   "categories": ["Machine Learning", "Programming Languages", "Education"],
   "keywords": ["chat", "codebase", "rag", "gemini", "byok", "ai"],
   "main": "./dist/extension.js",
+  "icon": "icon.png",
   "activationEvents": ["onStartupFinished"],
   "contributes": {
     "chatParticipants": [
