@@ -1,7 +1,7 @@
 {
   "name": "code-chatter",
   "displayName": "CodeChatter",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Understand any repo in minutes. Local-first, BYOK RAG over your codebase in the chat panel.",
   "publisher": "codechatter",
   "license": "MIT",
