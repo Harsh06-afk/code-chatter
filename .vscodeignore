@@ -1,0 +1,15 @@
+# Ship only the bundled extension + wasm assets, not the source or deps.
+core/**
+extension/**
+cli/**
+node_modules/**
+.vscode/**
+.git/**
+.claude/**
+.gitignore
+.codechatter/**
+*.vsix
+tsconfig.json
+esbuild.js
+**/*.ts
+**/*.map

@@ -1,0 +1,107 @@
+{
+  "name": "code-chatter",
+  "displayName": "CodeChatter",
+  "version": "0.0.1",
+  "description": "Understand any repo in minutes. Local-first, BYOK RAG over your codebase in the chat panel.",
+  "publisher": "codechatter",
+  "license": "MIT",
+  "repository": { "type": "git", "url": "https://github.com/your-org/code-chatter.git" },
+  "bugs": { "url": "https://github.com/your-org/code-chatter/issues" },
+  "homepage": "https://github.com/your-org/code-chatter#readme",
+  "engines": {
+    "vscode": "^1.90.0",
+    "node": ">=18"
+  },
+  "categories": ["Machine Learning", "Programming Languages", "Education"],
+  "keywords": ["chat", "codebase", "rag", "gemini", "byok", "ai"],
+  "main": "./dist/extension.js",
+  "activationEvents": ["onStartupFinished"],
+  "contributes": {
+    "chatParticipants": [
+      {
+        "id": "codechatter.chat",
+        "name": "codechatter",
+        "fullName": "CodeChatter",
+        "description": "Ask questions about this repository",
+        "isSticky": true,
+        "commands": [
+          {
+            "name": "changes",
+            "description": "Summarize what changed in recent commits (e.g. /changes 5)"
+          }
+        ]
+      }
+    ],
+    "commands": [
+      { "command": "codechatter.indexRepo", "title": "CodeChatter: Index Repo", "category": "CodeChatter" },
+      { "command": "codechatter.reindex", "title": "CodeChatter: Re-index Changed Files", "category": "CodeChatter" },
+      { "command": "codechatter.deleteIndex", "title": "CodeChatter: Delete Index", "category": "CodeChatter" },
+      { "command": "codechatter.setApiKey", "title": "CodeChatter: Set API Key", "category": "CodeChatter" },
+      { "command": "codechatter.explainSelection", "title": "CodeChatter: Explain with Repo Context", "category": "CodeChatter" },
+      { "command": "codechatter.repoTour", "title": "CodeChatter: Repo Tour", "category": "CodeChatter" }
+    ],
+    "menus": {
+      "editor/context": [
+        { "command": "codechatter.explainSelection", "when": "editorHasSelection", "group": "navigation@9" }
+      ]
+    },
+    "configuration": {
+      "title": "CodeChatter",
+      "properties": {
+        "codechatter.chatProvider": {
+          "type": "string",
+          "enum": ["gemini", "openai", "deepseek", "groq", "anthropic", "ollama"],
+          "default": "gemini",
+          "description": "Provider used to answer questions."
+        },
+        "codechatter.chatModel": {
+          "type": "string",
+          "default": "",
+          "description": "Override the chat model id. Leave blank to use the provider default."
+        },
+        "codechatter.embeddingProvider": {
+          "type": "string",
+          "enum": ["gemini", "openai", "ollama"],
+          "default": "gemini",
+          "description": "Provider used to build the index. Locked once a repo is indexed; changing it requires a full re-index."
+        },
+        "codechatter.topK": {
+          "type": "number",
+          "default": 8,
+          "description": "Number of code chunks retrieved per question."
+        },
+        "codechatter.minScore": {
+          "type": "number",
+          "default": 0.55,
+          "description": "Minimum cosine similarity for a retrieved chunk to count as relevant. Below this, CodeChatter answers 'not found' instead of using irrelevant context. Lower = more permissive."
+        },
+        "codechatter.customBaseUrl": {
+          "type": "string",
+          "default": "",
+          "description": "Custom base URL for self-hosted/Ollama endpoints. Requires confirmation before your key is sent."
+        }
+      }
+    }
+  },
+  "scripts": {
+    "build": "node esbuild.js",
+    "watch": "node esbuild.js --watch",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "vscode:prepublish": "node esbuild.js --production",
+    "cc": "tsx cli/index.ts",
+    "index": "tsx cli/index.ts index",
+    "ask": "tsx cli/index.ts ask"
+  },
+  "dependencies": {
+    "ignore": "^5.3.0",
+    "web-tree-sitter": "^0.22.6",
+    "tree-sitter-wasms": "^0.1.11"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.0",
+    "@types/vscode": "^1.90.0",
+    "esbuild": "^0.21.0",
+    "tsx": "^4.7.0",
+    "typescript": "^5.4.0"
+  }
+}
