@@ -53,6 +53,11 @@
     ],
     "commands": [
       {
+        "command": "codechatter.ask",
+        "title": "CodeChatter: Ask",
+        "category": "CodeChatter"
+      },
+      {
         "command": "codechatter.indexRepo",
         "title": "CodeChatter: Index Repo",
         "category": "CodeChatter"

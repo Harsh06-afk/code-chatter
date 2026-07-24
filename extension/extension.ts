@@ -7,6 +7,7 @@ import { promptForApiKey } from "./keys";
 import { StatusBar } from "./statusBar";
 import { registerWatchers } from "./watchers";
 import { generateRepoTour } from "./repoTour";
+import { openAskPanel } from "./askPanel";
 import { deleteIndex, workspaceRoot } from "./storage";
 
 export async function activate(context: vscode.ExtensionContext): Promise<void> {
@@ -17,17 +18,25 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
   await status.refresh();
   registerWatchers(context, status);
 
-  // Chat participant: @codechatter
-  const participant = vscode.chat.createChatParticipant("codechatter.chat", createChatHandler(context));
-  participant.iconPath = new vscode.ThemeIcon("comment-discussion");
-  context.subscriptions.push(participant);
+  // Chat participant: @codechatter (only where the host exposes the Chat API;
+  // forks like Antigravity/Cursor/Windsurf don't, so the Ask panel is the path there).
+  if (typeof vscode.chat?.createChatParticipant === "function") {
+    try {
+      const participant = vscode.chat.createChatParticipant("codechatter.chat", createChatHandler(context));
+      participant.iconPath = new vscode.ThemeIcon("comment-discussion");
+      context.subscriptions.push(participant);
+    } catch {
+      // Host advertises the API but doesn't support registration — ignore.
+    }
+  }
 
   context.subscriptions.push(
+    vscode.commands.registerCommand("codechatter.ask", () => openAskPanel(context)),
     vscode.commands.registerCommand("codechatter.indexRepo", () => runIndex(context, status, false)),
     vscode.commands.registerCommand("codechatter.reindex", () => runIndex(context, status, true)),
     vscode.commands.registerCommand("codechatter.setApiKey", () => promptForApiKey(context.secrets)),
     vscode.commands.registerCommand("codechatter.deleteIndex", () => confirmDeleteIndex(context, status)),
-    vscode.commands.registerCommand("codechatter.explainSelection", () => explainSelection()),
+    vscode.commands.registerCommand("codechatter.explainSelection", () => explainSelection(context)),
     vscode.commands.registerCommand("codechatter.repoTour", () => generateRepoTour(context)),
   );
 }
@@ -49,10 +58,10 @@ async function confirmDeleteIndex(context: vscode.ExtensionContext, status: Stat
 }
 
 /**
- * "Explain with repo context" (PRD v2): send the current selection to the chat
- * participant, which will answer it with retrieved repo context.
+ * "Explain with repo context" (PRD v2): open the Ask panel pre-loaded with a
+ * question about the current selection, answered with retrieved repo context.
  */
-async function explainSelection(): Promise<void> {
+async function explainSelection(context: vscode.ExtensionContext): Promise<void> {
   const editor = vscode.window.activeTextEditor;
   const root = workspaceRoot();
   if (!editor || editor.selection.isEmpty || !root) {
@@ -61,6 +70,6 @@ async function explainSelection(): Promise<void> {
   }
   const code = editor.document.getText(editor.selection);
   const rel = path.relative(root, editor.document.uri.fsPath).split(path.sep).join("/");
-  const query = `@codechatter Explain this code from \`${rel}\` and how it fits into the repo:\n\n\`\`\`\n${code}\n\`\`\``;
-  await vscode.commands.executeCommand("workbench.action.chat.open", { query });
+  const query = `Explain this code from \`${rel}\` and how it fits into the repo:\n\n\`\`\`\n${code}\n\`\`\``;
+  await openAskPanel(context, query);
 }
